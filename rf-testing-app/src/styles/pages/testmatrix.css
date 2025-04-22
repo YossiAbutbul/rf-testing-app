@@ -1,0 +1,113 @@
+.test-matrix-controls {
+  margin-bottom: var(--space-6);
+}
+
+.control-row {
+  display: flex;
+  gap: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.select-container {
+  flex: 1;
+}
+
+.select-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.test-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.test-summary {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  background-color: var(--color-gray-50);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+.test-results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.test-results-table th {
+  background-color: var(--color-gray-50);
+  padding: var(--space-3) var(--space-4);
+  font-weight: 500;
+  text-align: left;
+  color: var(--text-secondary);
+}
+
+.test-results-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.test-row {
+  transition: background-color var(--transition-fast);
+}
+
+.test-row:hover {
+  background-color: var(--color-gray-50);
+}
+
+.status-column {
+  width: 48px;
+}
+
+.status-cell {
+  text-align: center;
+}
+
+.status-icon {
+  font-size: 1.25rem;
+}
+
+.status-icon.success {
+  color: var(--color-status-success);
+}
+
+.status-icon.error {
+  color: var(--color-status-error);
+}
+
+.status-icon.pending {
+  color: var(--color-status-pending);
+}
+
+.result-cell {
+  text-align: center;
+}
+
+.result-badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.result-badge.pass {
+  background-color: rgba(46, 204, 113, 0.1);
+  color: var(--color-status-success);
+}
+
+.result-badge.fail {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: var(--color-status-error);
+}
+
+.result-badge.pending {
+  background-color: rgba(149, 165, 166, 0.1);
+  color: var(--color-status-pending);
+}

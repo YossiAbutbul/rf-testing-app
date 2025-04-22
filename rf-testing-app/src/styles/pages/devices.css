@@ -1,0 +1,97 @@
+.device-search {
+  display: flex;
+  margin-bottom: var(--space-6);
+  gap: var(--space-4);
+}
+
+.search-input-container {
+  position: relative;
+  flex-grow: 1;
+}
+
+.search-icon {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+}
+
+.filter-button {
+  width: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.devices-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.device-card {
+  display: flex;
+  align-items: center;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+.device-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.device-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-4);
+  color: var(--color-dark-gray);
+  font-size: 1.25rem;
+}
+
+.device-info {
+  flex-grow: 1;
+}
+
+.device-name {
+  font-weight: 500;
+  margin-bottom: var(--space-1);
+}
+
+.device-id {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.device-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.connection-status {
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+}
+
+.connection-status.connected {
+  background-color: rgba(46, 204, 113, 0.1);
+  color: var(--color-status-success);
+}
+
+.connect-button {
+  background-color: var(--color-gray-200);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-4);
+}

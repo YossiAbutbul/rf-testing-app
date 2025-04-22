@@ -1,0 +1,111 @@
+.project-selector {
+  margin-bottom: var(--space-6);
+  max-width: 300px;
+}
+
+.project-select {
+  width: 100%;
+}
+
+.reports-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.reports-card-title {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.reports-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reports-table th {
+  background-color: var(--color-gray-50);
+  padding: var(--space-3) var(--space-4);
+  font-weight: 500;
+  text-align: left;
+  color: var(--text-secondary);
+}
+
+.reports-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.report-row {
+  transition: background-color var(--transition-fast);
+}
+
+.report-row:hover {
+  background-color: var(--color-gray-50);
+}
+
+.status-column {
+  width: 48px;
+}
+
+.status-cell {
+  text-align: center;
+}
+
+.status-icon {
+  font-size: 1.25rem;
+}
+
+.status-icon.success {
+  color: var(--color-status-success);
+}
+
+.status-icon.error {
+  color: var(--color-status-error);
+}
+
+.status-icon.pending {
+  color: var(--color-status-pending);
+}
+
+.actions-cell {
+  text-align: right;
+}
+
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.action-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.action-button:hover {
+  background-color: var(--color-gray-100);
+  color: var(--text-primary);
+}
+
+.no-reports-message {
+  text-align: center;
+  padding: var(--space-12);
+  color: var(--text-secondary);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+  opacity: 0.3;
+}

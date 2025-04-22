@@ -1,0 +1,115 @@
+.spectrum-container {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.spectrum-view-panel {
+  flex: 3;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.spectrum-settings-panel {
+  flex: 1;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.view-mode-tabs,
+.settings-tabs {
+  display: flex;
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.view-mode-tab,
+.settings-tab {
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--text-sm);
+  border-bottom: 2px solid transparent;
+}
+
+.view-mode-tab.active,
+.settings-tab.active {
+  border-bottom: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.view-mode-tab:hover,
+.settings-tab:hover {
+  color: var(--color-primary);
+}
+
+.spectrum-canvas-container {
+  position: relative;
+  margin-top: var(--space-4);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.spectrum-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.y-axis-labels {
+  position: absolute;
+  left: 5px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  padding: var(--space-2) 0;
+}
+
+.x-axis-labels {
+  position: absolute;
+  bottom: 5px;
+  left: 50px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.input-with-unit {
+  display: flex;
+  align-items: center;
+}
+
+.input-with-unit .form-input {
+  flex: 1;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.unit-selector {
+  width: 80px;
+}
+
+.unit-selector .form-select {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .spectrum-container {
+    flex-direction: column;
+  }
+}

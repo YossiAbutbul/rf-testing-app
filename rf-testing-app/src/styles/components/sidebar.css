@@ -11,10 +11,6 @@
   position: relative;
 }
 
-.sidebar.collapsed {
-  width: 72px;
-}
-
 .app-title {
   padding: var(--space-4);
   font-size: var(--text-xl);
@@ -67,19 +63,31 @@
   flex-shrink: 0;
 }
 
-.sidebar.collapsed .nav-text {
-  display: none;
-}
-
 .sidebar-footer {
   padding: var(--space-4);
-  padding-left: var(--space-6);
   color: var(--color-gray-400);
   font-size: var(--text-sm);
   margin-top: auto;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.footer-text {
   white-space: nowrap;
   overflow: hidden;
+}
+.sidebar-footer i {
+  font-size: 1.1rem;
+}
+
+.sidebar-footer:hover {
+  color: var(--color-white);
+  background-color: rgba(255, 255, 255, 0.05);
+  text-decoration: none;
 }
 
 .sidebar-toggle {
@@ -97,15 +105,6 @@
   color: var(--color-gray-300);
   transition: transform var(--transition-normal);
   z-index: 10;
-}
-
-.sidebar.collapsed .sidebar-toggle {
-  transform: rotate(180deg);
-}
-
-.sidebar-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: var(--color-white);
 }
 
 .device-status-indicator {

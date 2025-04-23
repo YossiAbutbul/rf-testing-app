@@ -30,9 +30,11 @@ h5,
 h6 {
   margin-bottom: var(--space-4);
   font-weight: 500;
-  color: var(--text-primary);
 }
 
+.app-title {
+  color: var(--color-white) !important;
+}
 h1 {
   font-size: var(--text-3xl);
 }

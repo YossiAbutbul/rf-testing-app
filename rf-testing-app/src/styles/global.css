@@ -37,6 +37,7 @@ h6 {
 }
 h1 {
   font-size: var(--text-3xl);
+  font-weight: 700;
 }
 
 h2 {
@@ -264,6 +265,7 @@ tr:last-child {
 }
 
 .btn-icon-only {
+  background-color: var(--color-white);
   width: 36px;
   height: 36px;
   padding: 0;

@@ -90,7 +90,7 @@ const DevicesPage = () => {
           <input 
             type="text" 
             className="form-input" 
-            placeholder="Sonata LoRa IL" 
+            placeholder="Enter device name or MAC to search..." 
           />
           <i className="bx bx-search search-icon"></i>
         </div>
@@ -121,7 +121,7 @@ const DevicesPage = () => {
                 </button>
               )}
               <button className="btn btn-icon-only">
-                <i className="bx bx-dots-vertical-rounded"></i>
+                <i className="bx bx-plus"></i>
               </button>
             </div>
           </div>

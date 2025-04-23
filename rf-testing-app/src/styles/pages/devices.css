@@ -82,12 +82,6 @@
   gap: var(--space-3);
 }
 
-.connection-status {
-  font-size: var(--text-sm);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-full);
-}
-
 .connection-status.connected {
   background-color: rgba(46, 204, 113, 0.1);
   color: var(--color-status-success);

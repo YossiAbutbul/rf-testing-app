@@ -236,6 +236,9 @@ tr:last-child {
   background-color: var(--bg-button-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-light);
+  padding: 5px 10px !important;
+  border-radius: var(--radius-lg);
+  border: none !important;
 }
 
 .btn-secondary:hover {

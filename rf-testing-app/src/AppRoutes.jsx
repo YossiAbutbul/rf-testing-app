@@ -1,6 +1,14 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout'; // Make sure this path is correct
+import Layout from './components/layout/Layout'; 
+import DevicesPage from './pages/DevicesPage';
+import ConfigurationsPage from './pages/ConfigurationsPage';
+import TestMatrixPage from './pages/TestMatrixPage';
+import TestSequencesPage from './pages/TestSequencesPage';
+import SpectrumViewPage from './pages/SpectrumViewPage';
+import ReportsPage from './pages/ReportsPage';
+// import ComplianceReferencePage from './pages/ComplianceReferencePage';
+
 
 // Placeholder pages
 const SimplePage = ({ title }) => (
@@ -15,12 +23,12 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<SimplePage title="Home" />} />
-        <Route path="/devices" element={<SimplePage title="Devices" />} />
-        <Route path="/configurations" element={<SimplePage title="Configurations" />} />
-        <Route path="/test-matrix" element={<SimplePage title="Test Matrix" />} />
-        <Route path="/test-sequences" element={<SimplePage title="Test Sequences" />} />
-        <Route path="/spectrum-view" element={<SimplePage title="Spectrum View" />} />
-        <Route path="/reports" element={<SimplePage title="Reports" />} />
+        <Route path="/devices" element={<DevicesPage />} />
+        <Route path="/configurations" element={<ConfigurationsPage />} />
+        <Route path="/test-matrix" element={<TestMatrixPage />} />
+        <Route path="/test-sequences" element={<TestSequencesPage />} />
+        <Route path="/spectrum-view" element={<SpectrumViewPage/>} />
+        <Route path="/reports" element={<ReportsPage />} />
         <Route path="/compliance" element={<SimplePage title="Compliance Reference" />} />
       </Route>
     </Routes>

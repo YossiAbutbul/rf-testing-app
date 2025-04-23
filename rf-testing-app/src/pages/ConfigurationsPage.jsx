@@ -58,11 +58,11 @@ const ConfigurationsPage = () => {
       <div className="section-header">
         <h1>Configurations</h1>
         <div className="header-actions">
-          <button className="btn btn-secondary" onClick={handleLoadConfiguration}>
+          <button className="btn btn-secondary config-btn" onClick={handleLoadConfiguration}>
             <i className="bx bx-folder-open btn-icon"></i>
             Load Configuration
           </button>
-          <button className="btn btn-primary" onClick={handleSaveConfiguration}>
+          <button className="btn btn-primary config-btn" onClick={handleSaveConfiguration}>
             <i className="bx bx-save btn-icon"></i>
             Save Configuration
           </button>

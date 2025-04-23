@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const EquipmentSetup = ({ onNext }) => {
   const [spectrumAnalyzer, setSpectrumAnalyzer] = useState({
-    model: 'CXA Signal Analazer',
+    model: 'CXA Signal Analyzer',
     serialNumber: 'MY51261627',
     ipAddress: '192.168.3.2',
     port: '5342',
@@ -15,6 +15,22 @@ const EquipmentSetup = ({ onNext }) => {
     // Logic to add additional test equipment
     console.log('Adding new equipment...');
   };
+  
+  // Toggle connection status
+  const toggleConnection = () => {
+    setSpectrumAnalyzer({
+      ...spectrumAnalyzer,
+      connected: !spectrumAnalyzer.connected
+    });
+  };
+  
+  // Handle input changes
+  const handleInputChange = (field, value) => {
+    setSpectrumAnalyzer({
+      ...spectrumAnalyzer,
+      [field]: value
+    });
+  };
 
   return (
     <div className="card">
@@ -22,34 +38,66 @@ const EquipmentSetup = ({ onNext }) => {
       <p className="card-description">Connect and configure test equipment</p>
       
       <div className="equipment-section">
-        <div className="equipment-card">
-          <div className="equipment-header">
-            <h3>Spectrum Analyzer</h3>
-            <div className={`connection-status ${spectrumAnalyzer.connected ? 'connected' : 'disconnected'}`}>
-              {spectrumAnalyzer.connected ? 'Connected' : 'Disconnected'}
+        <div className="equipment-card-container">
+          <div className="equipment-card">
+            <div className="equipment-header">
+              <h3>Spectrum Analyzer</h3>
+              <div className="connection-container">
+                <button className="refresh-connection-button" onClick={toggleConnection}>
+                  <i className="bx bx-refresh"></i>
+                </button>
+                <div className={`connection-status ${spectrumAnalyzer.connected ? 'connected' : 'disconnected'}`}>
+                  {spectrumAnalyzer.connected ? 'Connected' : 'Disconnected'}
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div className="equipment-details">
-            <div className="detail-row">
-              <div className="detail-label">Model:</div>
-              <div className="detail-value">{spectrumAnalyzer.model}</div>
-            </div>
-            <div className="detail-row">
-              <div className="detail-label">Serial Number:</div>
-              <div className="detail-value">{spectrumAnalyzer.serialNumber}</div>
-            </div>
-            <div className="detail-row">
-              <div className="detail-label">IP Address:</div>
-              <div className="detail-value">{spectrumAnalyzer.ipAddress}</div>
-            </div>
-            <div className="detail-row">
-              <div className="detail-label">Port:</div>
-              <div className="detail-value">{spectrumAnalyzer.port}</div>
-            </div>
-            <div className="detail-row">
-              <div className="detail-label">External Attenuation:</div>
-              <div className="detail-value">{spectrumAnalyzer.externalAttenuation}</div>
+            
+            <div className="equipment-details">
+              <div className="detail-row">
+                <div className="detail-label">Model:</div>
+                <input 
+                  type="text" 
+                  className="detail-input" 
+                  value={spectrumAnalyzer.model} 
+                  onChange={(e) => handleInputChange('model', e.target.value)}
+                />
+              </div>
+              <div className="detail-row">
+                <div className="detail-label">Serial Number:</div>
+                <input 
+                  type="text" 
+                  className="detail-input" 
+                  value={spectrumAnalyzer.serialNumber} 
+                  onChange={(e) => handleInputChange('serialNumber', e.target.value)}
+                />
+              </div>
+              <div className="detail-row">
+                <div className="detail-label">IP Address:</div>
+                <input 
+                  type="text" 
+                  className="detail-input" 
+                  value={spectrumAnalyzer.ipAddress} 
+                  onChange={(e) => handleInputChange('ipAddress', e.target.value)}
+                />
+              </div>
+              <div className="detail-row">
+                <div className="detail-label">Port:</div>
+                <input 
+                  type="text" 
+                  className="detail-input" 
+                  value={spectrumAnalyzer.port} 
+                  onChange={(e) => handleInputChange('port', e.target.value)}
+                />
+              </div>
+              <div className="detail-row">
+                <div className="detail-label">External Attenuation:</div>
+                <input 
+                  type="text" 
+                  className="detail-input" 
+                  value={spectrumAnalyzer.externalAttenuation} 
+                  onChange={(e) => handleInputChange('externalAttenuation', e.target.value)}
+                />
+              </div>
             </div>
           </div>
         </div>

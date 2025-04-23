@@ -1,0 +1,311 @@
+.configuration-content {
+  margin-top: var(--space-6);
+}
+
+.step-indicator {
+  display: flex;
+  margin-bottom: var(--space-6);
+  gap: var(--space-4);
+}
+
+.step {
+  flex: 1;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-6);
+  position: relative;
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-fast);
+}
+
+.step.active {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.step.completed {
+  background-color: rgba(46, 204, 113, 0.05);
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-right: var(--space-2);
+  border: 1px solid var(--border-medium);
+}
+
+.step.active .step-number {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.step.completed .step-number {
+  background-color: var(--color-status-success);
+  color: var(--color-white);
+  border-color: var(--color-status-success);
+}
+
+.step-title {
+  display: inline-block;
+  font-weight: 500;
+  margin-bottom: var(--space-1);
+}
+
+.step-description {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-description {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-6);
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-6);
+}
+
+/* Protocol settings specific styles */
+.protocol-tabs {
+  display: flex;
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.protocol-tab {
+  padding: var(--space-2) var(--space-4);
+  margin-right: var(--space-4);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+}
+
+.protocol-tab.active {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.protocol-settings-content {
+  margin-top: var(--space-6);
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  flex: 1;
+  font-weight: 500;
+}
+
+.setting-value {
+  flex: 2;
+  color: var(--text-secondary);
+}
+
+.edit-setting-button {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+}
+
+.edit-setting-button:hover {
+  background-color: var(--color-gray-50);
+  color: var(--text-primary);
+}
+
+/* Equipment specific styles */
+.equipment-section {
+  display: flex;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.equipment-card-container {
+  width: 70%;
+}
+
+.equipment-card {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.equipment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.equipment-header h3 {
+  margin-bottom: 0;
+}
+
+.connection-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.refresh-connection-button {
+  background: transparent;
+  border: none;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.refresh-connection-button:hover {
+  background-color: var(--color-gray-50);
+  color: var(--text-primary);
+}
+
+.connection-status {
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+}
+
+.connection-status.connected {
+  background-color: rgba(46, 204, 113, 0.1);
+  color: var(--color-status-success);
+}
+
+.connection-status.disconnected {
+  background-color: rgba(149, 165, 166, 0.1);
+  color: var(--color-status-pending);
+}
+
+.equipment-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.detail-label {
+  width: 40%;
+  color: var(--text-secondary);
+}
+
+.detail-input {
+  width: 60%;
+  border: none;
+  background: transparent;
+  font-size: var(--text-sm);
+  text-align: right;
+  color: var(--text-primary);
+  padding: var(--space-1);
+}
+
+.detail-input:focus {
+  outline: none;
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-sm);
+}
+
+.add-equipment-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--color-gray-50);
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-medium);
+  align-self: center;
+}
+
+.add-equipment-button:hover {
+  background-color: var(--color-gray-100);
+  color: var(--text-primary);
+}
+
+.equipment-status,
+.protocol-status {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.equipment-status i,
+.protocol-status i {
+  font-size: 1.5rem;
+  margin-top: var(--space-1);
+}
+
+/* Test parameters styles */
+.parameter-section {
+  margin-bottom: var(--space-6);
+}
+
+.checkbox-group {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.path-input-container {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.browse-button {
+  flex-shrink: 0;
+}
+
+.done-button {
+  background-color: var(--color-status-success);
+}
+
+.done-button:hover {
+  background-color: var(--color-accent-dark);
+}

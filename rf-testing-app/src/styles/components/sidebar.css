@@ -37,7 +37,7 @@
   display: flex;
   align-items: center;
   margin: var(--space-1) var(--space-2);
-  padding: var(--space-3) var(--space-6);
+  padding: var(--space-3) var(--space-3);
   color: var(--color-gray-300);
   position: relative;
   transition: all var(--transition-fast);
@@ -63,7 +63,7 @@
   align-items: center;
   justify-content: center;
   width: 28px;
-  margin-right: var(--space-4);
+  margin-right: var(--space-3);
   flex-shrink: 0;
 }
 

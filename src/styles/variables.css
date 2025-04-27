@@ -29,7 +29,7 @@
   --color-status-pending: #95a5a6;
 
   /* Background colors */
-  --bg-sidebar: var(--color-black);
+  --bg-sidebar: #0a0f1c; /* #0f1b3d */
   --bg-main: var(--color-white);
   --bg-card: var(--color-white);
   --bg-input: var(--color-white);

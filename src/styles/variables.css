@@ -23,10 +23,10 @@
   --color-error: #e74c3c;
 
   /* Status colors */
-  --color-status-success: #2ecc71;
+  --color-status-success: #2a5c3f;
   --color-status-warning: #f1c40f;
   --color-status-error: #e74c3c;
-  --color-status-pending: #95a5a6;
+  --color-status-pending: #707a7a;
 
   /* Background colors */
   --bg-sidebar: #0a0f1c; /* #0f1b3d */

@@ -93,7 +93,7 @@ const TestSequencesPage = () => {
         <h1>Test Sequences Builder</h1>
         <div className="header-actions">
           <button className="btn btn-secondary" id='load-config' onClick={handleLoadConfiguration}>
-            <i className="bx bx-download btn-icon"></i>
+            <i className="bx bx-upload btn-icon"></i>
             Load Configuration
           </button>
           <button className="btn btn-secondary" id='save-config' onClick={handleSaveConfiguration}>

@@ -156,13 +156,14 @@
 }
 
 .equipment-card-container {
-  width: 70%;
+  width: 100%;
 }
 
 .equipment-card {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
+  max-width: 32%;
 }
 
 .equipment-header {

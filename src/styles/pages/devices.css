@@ -96,3 +96,76 @@
   font-family: inherit;
   border-radius: var(--radius-full) !important;
 }
+
+/* Tab Switching Animation */
+.tabs {
+  transition: all 0.3s ease;
+}
+
+.tab {
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  transform: translateY(-2px);
+}
+
+/* Project Expansion Animation */
+.device-card[data-expanded="true"] {
+  background-color: var(--bg-card-hover);
+}
+
+.devices-list {
+  transition: max-height 0.4s ease-in-out;
+}
+
+.project-devices {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.4s ease-in-out;
+}
+
+.project-devices.expanded {
+  max-height: 1000px; /* Adjust based on expected max content */
+  opacity: 1;
+}
+
+/* Fade-in/Slide-in Animation for Expanded Devices */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.expanded-device {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Smooth Color Transition for Connection Status */
+.connection-status,
+.connect-button {
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.connection-status:hover,
+.connect-button:hover {
+  transform: scale(1.05);
+}
+
+/* Optional: Subtle Hover Effect for Project Cards */
+.device-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.device-card:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-md);
+}

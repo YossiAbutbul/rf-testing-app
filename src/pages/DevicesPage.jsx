@@ -188,6 +188,7 @@ const DevicesPage = () => {
               <div 
                 key={project.id} 
                 className="device-card"
+                data-expanded={!!expandedProjects[project.id]}
                 onClick={() => toggleProjectExpand(project.id)}
               >
                 <div className="device-icon">
@@ -211,7 +212,11 @@ const DevicesPage = () => {
               </div>
               
               {expandedProjects[project.id] && project.devices.map((device, index) => (
-                <div key={index} className="device-card" style={{marginLeft: '40px', width: 'calc(100% - 40px)'}}>
+                <div 
+                  key={index} 
+                  className="device-card expanded-device" 
+                  style={{marginLeft: '40px', width: 'calc(100% - 40px)'}}
+                >
                   <div className="device-icon">
                     <i className="bx bx-bluetooth"></i>
                   </div>

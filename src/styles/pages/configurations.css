@@ -100,8 +100,8 @@
 }
 
 .protocol-tab.active {
-  border-bottom-color: var(--color-primary);
-  color: var(--color-primary);
+  border-bottom-color: var(--color-dark-gray);
+  color: var(--color-gray-700);
   font-weight: 500;
 }
 

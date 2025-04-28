@@ -40,6 +40,7 @@
   background-color: var(--bg-card);
   box-shadow: var(--shadow-sm);
   transition: box-shadow var(--transition-fast);
+  cursor: pointer;
 }
 
 .device-card:hover {
@@ -52,7 +53,7 @@
 .device-icon {
   width: 40px;
   height: 40px;
-  background-color: #f5f5f5;
+  background-color: var(--color-gray-100);
   border-radius: 50%;
   display: flex;
   align-items: center;

@@ -38,14 +38,9 @@
 
 .view-mode-tab.active,
 .settings-tab.active {
-  border-bottom: 2px solid var(--color-primary);
-  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-dark-gray);
+  color: var(--color-gray-700);
   font-weight: 500;
-}
-
-.view-mode-tab:hover,
-.settings-tab:hover {
-  color: var(--color-primary);
 }
 
 .spectrum-canvas-container {

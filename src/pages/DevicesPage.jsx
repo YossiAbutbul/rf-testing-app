@@ -64,7 +64,7 @@ const DevicesPage = () => {
     <div className="page-container">
       <div className="section-header">
         <h1>Device Management</h1>
-        <button className="btn btn-primary" onClick={scanForDevices} disabled={loading}>
+        <button className="btn btn-primary" id='deivce-scan' onClick={scanForDevices} disabled={loading}>
           <i className="bx bx-bluetooth btn-icon"></i>
           {loading ? 'Scanning...' : 'Scan for Devices'}
         </button>

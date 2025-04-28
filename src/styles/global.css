@@ -264,7 +264,7 @@ tr:last-child {
 }
 
 .btn-icon {
-  margin-right: var(--space-2);
+  align-items: center;
 }
 
 .btn-icon-only {
@@ -533,4 +533,37 @@ tr:last-child {
 .result-badge.pending {
   background-color: rgba(149, 165, 166, 0.1);
   color: var(--color-status-pending);
+}
+
+.config-btn {
+  background-color: var(--color-white);
+  padding: 12px 16px !important;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+}
+
+#save-results,
+#load-tests,
+#load-config,
+#save-config,
+#deivce-scan,
+#run-test,
+#add-test {
+  padding: 12px 16px !important;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  gap: var(--space-2);
 }

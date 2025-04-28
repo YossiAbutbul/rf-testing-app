@@ -118,15 +118,15 @@ const TestMatrixPage = () => {
       <div className="section-header">
         <h1>Test Matrix</h1>
         <div className="header-actions">
-          <button className="btn btn-secondary" onClick={handleLoadTests}>
+          <button className="btn btn-secondary" id='load-tests' onClick={handleLoadTests}>
             <i className="bx bx-upload btn-icon"></i>
             Load Tests
           </button>
-          <button className="btn btn-secondary" onClick={handleSaveResults}>
+          <button className="btn btn-secondary" id='save-results' onClick={handleSaveResults}>
             <i className="bx bx-save btn-icon"></i>
             Save Results
           </button>
-          <button className="btn btn-primary" onClick={handleRunTests}>
+          <button className="btn btn-primary" id='run-test' onClick={handleRunTests}>
             <i className="bx bx-play btn-icon"></i>
             Run Tests
           </button>

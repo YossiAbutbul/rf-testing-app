@@ -6,7 +6,7 @@ const EquipmentSetup = ({ onNext }) => {
     serialNumber: 'MY51261627',
     ipAddress: '192.168.3.2',
     port: '5342',
-    externalAttenuation: '35 dB',
+    externalAttenuation: '35',
     connected: true
   });
 
@@ -83,7 +83,7 @@ const EquipmentSetup = ({ onNext }) => {
               <div className="detail-row">
                 <div className="detail-label">Port:</div>
                 <input 
-                  type="text" 
+                  type="number" 
                   className="detail-input" 
                   value={spectrumAnalyzer.port} 
                   onChange={(e) => handleInputChange('port', e.target.value)}
@@ -92,11 +92,12 @@ const EquipmentSetup = ({ onNext }) => {
               <div className="detail-row">
                 <div className="detail-label">External Attenuation:</div>
                 <input 
-                  type="text" 
+                  type="number" 
                   className="detail-input" 
                   value={spectrumAnalyzer.externalAttenuation} 
                   onChange={(e) => handleInputChange('externalAttenuation', e.target.value)}
                 />
+                <div className='units-label'>dB</div>
               </div>
             </div>
           </div>

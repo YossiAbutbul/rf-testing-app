@@ -14,12 +14,13 @@
   border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-6);
   position: relative;
-  border: 1px solid var(--border-light);
+  border: 2px solid var(--border-light);
   transition: all var(--transition-fast);
 }
 
 .step.active {
-  border-color: var(--color-primary);
+  border-color: var(--color-gray-300);
+  /* border: 2px solid var(--color-dark-gray); */
   box-shadow: var(--shadow-sm);
 }
 

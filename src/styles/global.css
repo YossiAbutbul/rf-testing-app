@@ -140,7 +140,7 @@ button {
   padding: var(--space-3);
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-xl);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   color: var(--text-primary);
   background-color: var(--bg-input);
 }

@@ -4,40 +4,62 @@ import '../styles/pages/devices.css';
 const DevicesPage = () => {
   const [activeTab, setActiveTab] = useState('available');
   const [devices, setDevices] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [expandedProjects, setExpandedProjects] = useState({});
 
-  // Simulated device data based on your screenshot
+  // Simulated device data with unique MAC addresses
   useEffect(() => {
     // This would be replaced with actual API calls in production
     const mockDevices = [
       {
-        id: '00:B0:D0:63:C2:26',
-        name: 'Sonata LoRa IL',
+        id: '00:11:22:33:44:55',
+        name: 'Sonata LoRa North',
         status: 'connected'
       },
       {
-        id: '00:B0:D0:63:C2:26',
-        name: 'Sonata LoRa IL',
+        id: '66:77:88:99:AA:BB',
+        name: 'Sonata LoRa South',
         status: 'disconnected'
       },
       {
-        id: '00:B0:D0:63:C2:26',
-        name: 'Sonata LoRa IL',
+        id: 'CC:DD:EE:FF:00:11',
+        name: 'Sonata LoRa East',
         status: 'disconnected'
       },
       {
-        id: '00:B0:D0:63:C2:26',
-        name: 'Sonata LoRa IL',
+        id: '22:33:44:55:66:77',
+        name: 'Sonata LoRa West',
         status: 'disconnected'
       },
       {
-        id: '00:B0:D0:63:C2:26',
-        name: 'Sonata LoRa IL',
+        id: '88:99:AA:BB:CC:DD',
+        name: 'Sonata LoRa Central',
         status: 'disconnected'
       }
     ];
     
+    const mockProjects = [
+      {
+        id: 1,
+        name: 'Sonata LoRa Project',
+        devices: [
+          { id: 'A4:5E:60:B2:C3:D4', name: 'Sonata LoRa IL', status: 'disconnected' },
+          { id: 'B5:6F:71:C3:D4:E5', name: 'Sonata LoRa IL', status: 'disconnected' }
+        ]
+      },
+      {
+        id: 2,
+        name: 'CAT-M Project',
+        devices: [
+          { id: 'C6:7G:82:D4:E5:F6', name: 'Booster CAT-M 2', status: 'connected' },
+          { id: 'D7:8H:93:E5:F6:G7', name: 'Booster CAT-M 2', status: 'disconnected' }
+        ]
+      }
+    ];
+    
     setDevices(mockDevices);
+    setProjects(mockProjects);
   }, []);
 
   const scanForDevices = () => {
@@ -50,14 +72,38 @@ const DevicesPage = () => {
     }, 2000);
   };
 
-  const connectToDevice = (deviceId) => {
-    // Update the status of the selected device to 'connected'
-    const updatedDevices = devices.map(device => ({
-      ...device,
-      status: device.id === deviceId ? 'connected' : device.status
+  const connectToDevice = (deviceId, type = 'available') => {
+    if (type === 'available') {
+      // Update the status of the selected device to 'connected'
+      const updatedDevices = devices.map(device => ({
+        ...device,
+        status: device.id === deviceId 
+          ? (device.status === 'connected' ? 'disconnected' : 'connected')
+          : device.status
+      }));
+      
+      setDevices(updatedDevices);
+    } else {
+      // Update projects devices
+      const updatedProjects = projects.map(project => ({
+        ...project,
+        devices: project.devices.map(device => ({
+          ...device,
+          status: device.id === deviceId 
+            ? (device.status === 'connected' ? 'disconnected' : 'connected')
+            : device.status
+        }))
+      }));
+      
+      setProjects(updatedProjects);
+    }
+  };
+
+  const toggleProjectExpand = (projectId) => {
+    setExpandedProjects(prev => ({
+      ...prev,
+      [projectId]: !prev[projectId]
     }));
-    
-    setDevices(updatedDevices);
   };
 
   return (
@@ -99,34 +145,109 @@ const DevicesPage = () => {
         </button>
       </div>
       
-      <div className="devices-list">
-        {devices.map((device, index) => (
-          <div key={index} className="device-card">
-            <div className="device-icon">
-              <i className="bx bx-bluetooth"></i>
-            </div>
-            <div className="device-info">
-              <div className="device-name">{device.name}</div>
-              <div className="device-id">{device.id}</div>
-            </div>
-            <div className="device-actions">
-              {device.status === 'connected' ? (
-                <div className="connection-status connected">Connected</div>
-              ) : (
-                <button 
-                  className="btn btn-secondary connect-button"
-                  onClick={() => connectToDevice(device.id)}
-                >
-                  Connect
+      {activeTab === 'available' && (
+        <div className="devices-list">
+          {devices.map((device, index) => (
+            <div key={index} className="device-card">
+              <div className="device-icon">
+                <i className="bx bx-bluetooth"></i>
+              </div>
+              <div className="device-info">
+                <div className="device-name">{device.name}</div>
+                <div className="device-id">{device.id}</div>
+              </div>
+              <div className="device-actions">
+                {device.status === 'connected' ? (
+                  <div 
+                    className="connection-status connected"
+                    onClick={() => connectToDevice(device.id)}
+                  >
+                    Connected
+                  </div>
+                ) : (
+                  <button 
+                    className="btn btn-secondary connect-button"
+                    onClick={() => connectToDevice(device.id)}
+                  >
+                    Connect
+                  </button>
+                )}
+                <button className="btn btn-icon-only">
+                  <i className="bx bx-plus"></i>
                 </button>
-              )}
-              <button className="btn btn-icon-only">
-                <i className="bx bx-plus"></i>
-              </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {activeTab === 'projects' && (
+        <div className="devices-list">
+          {projects.map((project) => (
+            <>
+              <div 
+                key={project.id} 
+                className="device-card"
+                onClick={() => toggleProjectExpand(project.id)}
+              >
+                <div className="device-icon">
+                  <i className="bx bx-folder"></i>
+                </div>
+                <div className="device-info">
+                  <div className="device-name">{project.name}</div>
+                  <div className="device-id">{project.devices.length} Devices</div>
+                </div>
+                <div className="device-actions">
+                  <button 
+                    className="btn btn-icon-only"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleProjectExpand(project.id);
+                    }}
+                  >
+                    <i className={`bx ${expandedProjects[project.id] ? 'bx-chevron-up' : 'bx-chevron-down'}`}></i>
+                  </button>
+                </div>
+              </div>
+              
+              {expandedProjects[project.id] && project.devices.map((device, index) => (
+                <div key={index} className="device-card" style={{marginLeft: '40px', width: 'calc(100% - 40px)'}}>
+                  <div className="device-icon">
+                    <i className="bx bx-bluetooth"></i>
+                  </div>
+                  <div className="device-info">
+                    <div className="device-name">{device.name}</div>
+                    <div className="device-id">{device.id}</div>
+                  </div>
+                  <div className="device-actions">
+                    {device.status === 'connected' ? (
+                      <div 
+                        className="connection-status connected"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          connectToDevice(device.id, 'projects');
+                        }}
+                      >
+                        Connected
+                      </div>
+                    ) : (
+                      <button 
+                        className="btn btn-secondary connect-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          connectToDevice(device.id, 'projects');
+                        }}
+                      >
+                        Connect
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

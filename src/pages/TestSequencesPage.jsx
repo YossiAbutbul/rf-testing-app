@@ -51,8 +51,8 @@ const TestSequencesPage = () => {
     runCondition: 'Always Run',
     testFrequency: 'LoRa 9xx MHz (IL)',
     testPower: '0 dBm',
-    minValue: '13.5 dBm',
-    maxValue: '14.5 dBm',
+    minValue: '-0.5 dBm',
+    maxValue: '0.5 dBm',
     captureSpectrum: true
   });
   

@@ -14,27 +14,27 @@ const DevicesPage = () => {
     const mockDevices = [
       {
         id: '00:11:22:33:44:55',
-        name: 'Sonata LoRa North',
+        name: 'Sonata LoRa 2 IL',
         status: 'connected'
       },
       {
         id: '66:77:88:99:AA:BB',
-        name: 'Sonata LoRa South',
+        name: 'Sonata LoRa 2 IL',
         status: 'disconnected'
       },
       {
         id: 'CC:DD:EE:FF:00:11',
-        name: 'Sonata LoRa East',
+        name: 'Sonata LoRa 2 US',
         status: 'disconnected'
       },
       {
         id: '22:33:44:55:66:77',
-        name: 'Sonata LoRa West',
+        name: 'CAT-M Gen. 2',
         status: 'disconnected'
       },
       {
         id: '88:99:AA:BB:CC:DD',
-        name: 'Sonata LoRa Central',
+        name: 'CAT-M Gen. 2',
         status: 'disconnected'
       }
     ];
@@ -44,16 +44,16 @@ const DevicesPage = () => {
         id: 1,
         name: 'Sonata LoRa Project',
         devices: [
-          { id: 'A4:5E:60:B2:C3:D4', name: 'Sonata LoRa IL', status: 'disconnected' },
-          { id: 'B5:6F:71:C3:D4:E5', name: 'Sonata LoRa IL', status: 'disconnected' }
+          { id: '00:11:22:33:44:55', name: 'Sonata LoRa 2 IL', status: 'connected' },
+          { id: 'B5:6F:71:C3:D4:E5', name: 'Sonata LoRa 2 IL', status: 'disconnected' }
         ]
       },
       {
         id: 2,
         name: 'CAT-M Project',
         devices: [
-          { id: 'C6:7G:82:D4:E5:F6', name: 'Booster CAT-M 2', status: 'connected' },
-          { id: 'D7:8H:93:E5:F6:G7', name: 'Booster CAT-M 2', status: 'disconnected' }
+          { id: 'C6:7G:82:D4:E5:F6', name: 'CAT-M Gen. 2', status: 'disconnected' },
+          { id: 'D7:8H:93:E5:F6:G7', name: 'CAT-M Gen. 2', status: 'disconnected' }
         ]
       }
     ];

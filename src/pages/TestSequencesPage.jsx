@@ -3,7 +3,7 @@ import '../styles/pages/testsequences.css';
 
 const TestSequencesPage = () => {
   const [activeTab, setActiveTab] = useState('lora');
-  const [selectedTest, setSelectedTest] = useState('tx-power-14dbm');
+  const [selectedTest, setSelectedTest] = useState('tx-power-0dbm');
   
   // Test steps based on the screenshot
   const testSteps = [
@@ -46,11 +46,11 @@ const TestSequencesPage = () => {
   
   // Form values for editing test steps
   const [editForm, setEditForm] = useState({
-    testName: 'Tx Power 14dBm',
+    testName: 'Tx Power 0dBm',
     testType: 'Power',
-    runCondition: 'If Previous Passes',
+    runCondition: 'Always Run',
     testFrequency: 'LoRa 9xx MHz (IL)',
-    testPower: '14 dBm',
+    testPower: '0 dBm',
     minValue: '13.5 dBm',
     maxValue: '14.5 dBm',
     captureSpectrum: true
@@ -223,8 +223,8 @@ const TestSequencesPage = () => {
                   value={editForm.testFrequency}
                   onChange={(e) => setEditForm({...editForm, testFrequency: e.target.value})}
                 >
-                  <option value="LoRa 9xx MHz (IL)">LoRa 9xx MHz (IL)</option>
                   <option value="LoRa 8xx MHz (EU)">LoRa 8xx MHz (EU)</option>
+                  <option value="LoRa 9xx MHz (IL)">LoRa 9xx MHz (IL)</option>
                 </select>
               </div>
               
@@ -235,8 +235,8 @@ const TestSequencesPage = () => {
                   value={editForm.testPower}
                   onChange={(e) => setEditForm({...editForm, testPower: e.target.value})}
                 >
-                  <option value="14 dBm">14 dBm</option>
                   <option value="0 dBm">0 dBm</option>
+                  <option value="14 dBm">14 dBm</option>
                   <option value="30 dBm">30 dBm</option>
                 </select>
               </div>

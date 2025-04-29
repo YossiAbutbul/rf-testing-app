@@ -59,7 +59,7 @@
 }
 
 .status-icon.success {
-  color: var(--color-status-success);
+  color: var(--color-status-success-light);
 }
 
 .status-icon.error {

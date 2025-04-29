@@ -16,8 +16,8 @@ const ConfigurationsPage = () => {
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Navigate to test matrix after configuration is complete
-      navigate('/test-matrix');
+      // Navigate to test sequences after configuration is complete
+      navigate('/test-sequences');
     }
   };
   

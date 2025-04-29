@@ -9,8 +9,8 @@ const Sidebar = () => {
   const navItems = [
     { path: '/devices', icon: 'bx bx-bluetooth', text: 'Devices' },
     { path: '/configurations', icon: 'bx bx-cog', text: 'Configurations' },
-    { path: '/test-matrix', icon: 'bx bx-table', text: 'Test Matrix' },
     { path: '/test-sequences', icon: 'bx bx-list-ul', text: 'Test Sequences' },
+    { path: '/test-matrix', icon: 'bx bx-table', text: 'Test Matrix' },
     { path: '/spectrum-view', icon: 'bx bx-line-chart', text: 'Spectrum View' },
     { path: '/reports', icon: 'bx bx-file', text: 'Reports' }
   ];

@@ -104,6 +104,33 @@ const SpectrumViewPage = () => {
     
     return { x, y, frequency, power };
   };
+  
+  // Find peak in the spectrum
+  const findPeak = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    // Generate points for the entire spectrum
+    let points = [];
+    for (let x = 50; x < canvas.width; x++) {
+      const { y, frequency, power } = getSpectrumPointAtX(x, canvas);
+      points.push({ x, y, frequency, power });
+    }
+    
+    // Sort by power (lowest y value = highest power)
+    points.sort((a, b) => a.y - b.y);
+    
+    // Get the highest peak (first item in sorted array)
+    const peak = points[0];
+    
+    // Get the canvas display dimensions for proper scaling
+    const rect = canvas.getBoundingClientRect();
+    const screenX = peak.x * (rect.width / canvas.width);
+    const screenY = peak.y * (rect.height / canvas.height);
+    
+    // Add marker at the peak
+    addMarker(screenX, screenY, peak.frequency, peak.power);
+  };
 
   // Handle canvas click to add a marker - USING DOUBLE CLICK INSTEAD
   const handleCanvasClick = (e) => {
@@ -314,6 +341,9 @@ const SpectrumViewPage = () => {
       <div className="section-header">
         <h1>Spectrum View</h1>
         <div className="header-actions">
+          <button className="btn btn-primary" onClick={findPeak}>
+             Peak Search
+          </button>
           <button className="btn btn-primary" onClick={handleCaptureImage}>
             <i className="bx bx-camera btn-icon"></i>
           </button>

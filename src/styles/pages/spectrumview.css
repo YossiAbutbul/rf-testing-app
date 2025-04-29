@@ -176,6 +176,16 @@
   background-color: var(--bg-danger-light);
 }
 
+.marker-controls {
+  margin-bottom: var(--space-4);
+}
+
+.marker-buttons {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
 .marker-instructions {
   margin: var(--space-2) 0;
   font-size: var(--text-sm);

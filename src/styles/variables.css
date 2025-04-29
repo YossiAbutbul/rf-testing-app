@@ -14,9 +14,9 @@
   --color-white: #ffffff;
 
   /* Brand colors */
-  --color-primary: #3498db;
-  --color-primary-dark: #2980b9;
-  --color-primary-light: #5dade2;
+  --color-primary: #0a2f3e;
+  --color-primary-dark: #051921;
+  --color-primary-light: #145f7c;
   --color-accent: #2ecc71;
   --color-accent-dark: #27ae60;
   --color-warning: #f39c12;
@@ -30,7 +30,7 @@
   --color-status-pending: #707a7a;
 
   /* Background colors */
-  --bg-sidebar: #0a0f1c; /* #0f1b3d */
+  --bg-sidebar: #051921; /* #0f1b3d */
   --bg-main: var(--color-white);
   --bg-card: var(--color-white);
   --bg-input: var(--color-white);

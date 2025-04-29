@@ -9,21 +9,21 @@ const TestSequencesPage = () => {
   const testSteps = [
     {
       id: 'tx-power-0dbm',
-      name: 'Tx Power 0dBm',
+      name: 'Tx Power 0 dBm',
       type: 'power',
       runCondition: 'always',
       badge: 'Power'
     },
     {
       id: 'tx-power-14dbm',
-      name: 'Tx Power 14dBm',
+      name: 'Tx Power 14 dBm',
       type: 'power',
       runCondition: 'ifPreviousPasses',
       badge: 'Power'
     },
     {
       id: 'tx-power-30dbm',
-      name: 'Tx Power 30dBm',
+      name: 'Tx Power 30 dBm',
       type: 'power',
       runCondition: 'ifPreviousPasses',
       badge: 'Power'
@@ -46,7 +46,7 @@ const TestSequencesPage = () => {
   
   // Form values for editing test steps
   const [editForm, setEditForm] = useState({
-    testName: 'Tx Power 0dBm',
+    testName: 'Tx Power 0 dBm',
     testType: 'Power',
     runCondition: 'Always Run',
     testFrequency: 'LoRa 9xx MHz (IL)',

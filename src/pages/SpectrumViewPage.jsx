@@ -283,7 +283,7 @@ const SpectrumViewPage = () => {
       // Draw marker circle
       ctx.beginPath();
       ctx.arc(canvasX, canvasY, isActive ? 6 : 4, 0, 2 * Math.PI);
-      ctx.fillStyle = '#00ff00'; // Green marker
+      ctx.fillStyle = '#e74c3c'; // Green marker
       ctx.fill();
       
       // Draw vertical line from marker to x-axis
@@ -291,7 +291,7 @@ const SpectrumViewPage = () => {
       ctx.setLineDash([3, 2]);
       ctx.moveTo(canvasX, canvasY);
       ctx.lineTo(canvasX, height);
-      ctx.strokeStyle = '#00ff00';
+      ctx.strokeStyle = '#e74c3c';
       ctx.lineWidth = 1;
       ctx.stroke();
       ctx.setLineDash([]);

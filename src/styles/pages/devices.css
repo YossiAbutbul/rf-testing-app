@@ -1,3 +1,4 @@
+/* Keep all your existing styles */
 .device-search {
   display: flex;
   margin-bottom: var(--space-6);
@@ -97,19 +98,33 @@
   border-radius: var(--radius-full) !important;
 }
 
-/* Tab Switching Animation */
+/* Updated Tab Switching Animation */
 .tabs {
-  transition: all 0.3s ease;
+  display: flex;
+  position: relative;
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-gray-200);
 }
 
 .tab {
-  transition: all 0.3s ease;
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
 }
 
 .tab.active {
   color: var(--color-primary);
-  border-bottom: 2px solid var(--color-primary);
-  transform: translateY(-2px);
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: all 0.3s cubic-bezier(0.38, 0.8, 0.32, 1.07);
 }
 
 /* Project Expansion Animation */

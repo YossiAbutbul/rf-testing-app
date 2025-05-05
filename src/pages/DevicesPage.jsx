@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/pages/devices.css';
 
 const DevicesPage = () => {
@@ -7,6 +7,57 @@ const DevicesPage = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [expandedProjects, setExpandedProjects] = useState({});
+  
+  // Refs for tab indicator positioning
+  const tabsRef = useRef(null);
+  const availableTabRef = useRef(null);
+  const projectsTabRef = useRef(null);
+  
+  // State for tab indicator position and width
+  const [tabIndicator, setTabIndicator] = useState({
+    left: 0,
+    width: 0
+  });
+
+  // Position the tab indicator whenever the active tab changes
+  useEffect(() => {
+    updateTabIndicator(activeTab);
+  }, [activeTab]);
+  
+  // Update tab indicator position and width based on active tab
+  const updateTabIndicator = (tab) => {
+    const currentTabRef = tab === 'available' ? availableTabRef.current : projectsTabRef.current;
+    
+    if (currentTabRef && tabsRef.current) {
+      const tabRect = currentTabRef.getBoundingClientRect();
+      const tabsRect = tabsRef.current.getBoundingClientRect();
+      
+      setTabIndicator({
+        left: tabRect.left - tabsRect.left,
+        width: tabRect.width
+      });
+    }
+  };
+  
+  // Also update the tab indicator on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      updateTabIndicator(activeTab);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeTab]);
+  
+  // Initially position the tab indicator after component mounts
+  useEffect(() => {
+    // Short delay to ensure refs are properly set
+    const timer = setTimeout(() => {
+      updateTabIndicator(activeTab);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Simulated device data with unique MAC addresses
   useEffect(() => {
@@ -116,19 +167,29 @@ const DevicesPage = () => {
         </button>
       </div>
       
-      <div className="tabs">
+      <div className="tabs" ref={tabsRef}>
         <div 
           className={`tab ${activeTab === 'available' ? 'active' : ''}`}
           onClick={() => setActiveTab('available')}
+          ref={availableTabRef}
         >
           Available Devices
         </div>
         <div 
           className={`tab ${activeTab === 'projects' ? 'active' : ''}`}
           onClick={() => setActiveTab('projects')}
+          ref={projectsTabRef}
         >
           Projects
         </div>
+        {/* Tab indicator element */}
+        <div 
+          className="tab-indicator" 
+          style={{ 
+            left: `${tabIndicator.left}px`, 
+            width: `${tabIndicator.width}px` 
+          }}
+        />
       </div>
       
       <div className="device-search">
@@ -184,9 +245,8 @@ const DevicesPage = () => {
       {activeTab === 'projects' && (
         <div className="devices-list">
           {projects.map((project) => (
-            <>
+            <React.Fragment key={project.id}>
               <div 
-                key={project.id} 
                 className="device-card"
                 data-expanded={!!expandedProjects[project.id]}
                 onClick={() => toggleProjectExpand(project.id)}
@@ -249,7 +309,7 @@ const DevicesPage = () => {
                   </div>
                 </div>
               ))}
-            </>
+            </React.Fragment>
           ))}
         </div>
       )}

@@ -1,9 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/pages/testsequences.css';
 
 const TestSequencesPage = () => {
   const [activeTab, setActiveTab] = useState('lora');
   const [selectedTest, setSelectedTest] = useState('tx-power-0dbm');
+  
+  // Refs for tab indicator positioning
+  const tabsRef = useRef(null);
+  const loraTabRef = useRef(null);
+  const cellularTabRef = useRef(null);
+  const bleTabRef = useRef(null);
+  
+  // State for tab indicator position and width
+  const [tabIndicator, setTabIndicator] = useState({
+    left: 0,
+    width: 0
+  });
+
+  // Position the tab indicator whenever the active tab changes
+  useEffect(() => {
+    updateTabIndicator(activeTab);
+  }, [activeTab]);
+  
+  // Update tab indicator position and width based on active tab
+  const updateTabIndicator = (tab) => {
+    let currentTabRef;
+    
+    switch(tab) {
+      case 'lora':
+        currentTabRef = loraTabRef.current;
+        break;
+      case 'cellular':
+        currentTabRef = cellularTabRef.current;
+        break;
+      case 'ble':
+        currentTabRef = bleTabRef.current;
+        break;
+      default:
+        currentTabRef = loraTabRef.current;
+    }
+    
+    if (currentTabRef && tabsRef.current) {
+      const tabRect = currentTabRef.getBoundingClientRect();
+      const tabsRect = tabsRef.current.getBoundingClientRect();
+      
+      setTabIndicator({
+        left: tabRect.left - tabsRect.left,
+        width: tabRect.width
+      });
+    }
+  };
+  
+  // Also update the tab indicator on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      updateTabIndicator(activeTab);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [activeTab]);
+  
+  // Initially position the tab indicator after component mounts
+  useEffect(() => {
+    // Short delay to ensure refs are properly set
+    const timer = setTimeout(() => {
+      updateTabIndicator(activeTab);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   // Test steps based on the screenshot
   const testSteps = [
@@ -107,25 +173,36 @@ const TestSequencesPage = () => {
         </div>
       </div>
       
-      <div className="protocol-tabs">
+      <div className="protocol-tabs" ref={tabsRef}>
         <div 
           className={`protocol-tab ${activeTab === 'lora' ? 'active' : ''}`}
           onClick={() => setActiveTab('lora')}
+          ref={loraTabRef}
         >
           LoRa
         </div>
         <div 
           className={`protocol-tab ${activeTab === 'cellular' ? 'active' : ''}`}
           onClick={() => setActiveTab('cellular')}
+          ref={cellularTabRef}
         >
           Cellular
         </div>
         <div 
           className={`protocol-tab ${activeTab === 'ble' ? 'active' : ''}`}
           onClick={() => setActiveTab('ble')}
+          ref={bleTabRef}
         >
           BLE
         </div>
+        {/* Tab indicator element */}
+        <div 
+          className="tab-indicator" 
+          style={{ 
+            left: `${tabIndicator.left}px`, 
+            width: `${tabIndicator.width}px` 
+          }}
+        />
       </div>
       
       <div className="sequence-builder">

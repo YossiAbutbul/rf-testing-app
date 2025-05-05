@@ -6,6 +6,88 @@ const SpectrumViewPage = () => {
   const [viewMode, setViewMode] = useState('real-time');
   const [configTab, setConfigTab] = useState('configurations');
   
+  // Refs for tab indicator positioning
+  const viewModeTabsRef = useRef(null);
+  const realTimeTabRef = useRef(null);
+  const maxHoldTabRef = useRef(null);
+  
+  const settingsTabsRef = useRef(null);
+  const configurationsTabRef = useRef(null);
+  const markersTabRef = useRef(null);
+  
+  // State for tab indicators position and width
+  const [viewModeIndicator, setViewModeIndicator] = useState({
+    left: 0,
+    width: 0
+  });
+  
+  const [settingsIndicator, setSettingsIndicator] = useState({
+    left: 0,
+    width: 0
+  });
+
+  // Position the view mode tab indicator when the active tab changes
+  useEffect(() => {
+    updateViewModeIndicator(viewMode);
+  }, [viewMode]);
+  
+  // Position the settings tab indicator when the active tab changes
+  useEffect(() => {
+    updateSettingsIndicator(configTab);
+  }, [configTab]);
+  
+  // Update view mode tab indicator position and width
+  const updateViewModeIndicator = (mode) => {
+    const currentTabRef = mode === 'real-time' ? realTimeTabRef.current : maxHoldTabRef.current;
+    
+    if (currentTabRef && viewModeTabsRef.current) {
+      const tabRect = currentTabRef.getBoundingClientRect();
+      const tabsRect = viewModeTabsRef.current.getBoundingClientRect();
+      
+      setViewModeIndicator({
+        left: tabRect.left - tabsRect.left,
+        width: tabRect.width
+      });
+    }
+  };
+  
+  // Update settings tab indicator position and width
+  const updateSettingsIndicator = (tab) => {
+    const currentTabRef = tab === 'configurations' ? configurationsTabRef.current : markersTabRef.current;
+    
+    if (currentTabRef && settingsTabsRef.current) {
+      const tabRect = currentTabRef.getBoundingClientRect();
+      const tabsRect = settingsTabsRef.current.getBoundingClientRect();
+      
+      setSettingsIndicator({
+        left: tabRect.left - tabsRect.left,
+        width: tabRect.width
+      });
+    }
+  };
+  
+  // Also update the tab indicators on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      updateViewModeIndicator(viewMode);
+      updateSettingsIndicator(configTab);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [viewMode, configTab]);
+  
+  // Initially position the tab indicators after component mounts
+  useEffect(() => {
+    // Short delay to ensure refs are properly set
+    const timer = setTimeout(() => {
+      updateViewModeIndicator(viewMode);
+      updateSettingsIndicator(configTab);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   // Spectrum analyzer settings
   const [settings, setSettings] = useState({
     startFrequency: '880',
@@ -352,19 +434,29 @@ const SpectrumViewPage = () => {
       
       <div className="spectrum-container">
         <div className="spectrum-view-panel">
-          <div className="view-mode-tabs">
+          <div className="view-mode-tabs" ref={viewModeTabsRef}>
             <div 
               className={`view-mode-tab ${viewMode === 'real-time' ? 'active' : ''}`}
               onClick={() => setViewMode('real-time')}
+              ref={realTimeTabRef}
             >
               Real-Time
             </div>
             <div 
               className={`view-mode-tab ${viewMode === 'max-hold' ? 'active' : ''}`}
               onClick={() => setViewMode('max-hold')}
+              ref={maxHoldTabRef}
             >
               Max Hold
             </div>
+            {/* Tab indicator element */}
+            <div 
+              className="view-mode-indicator" 
+              style={{ 
+                left: `${viewModeIndicator.left}px`, 
+                width: `${viewModeIndicator.width}px` 
+              }}
+            />
           </div>
           
           <div className="spectrum-canvas-container">
@@ -407,19 +499,29 @@ const SpectrumViewPage = () => {
         </div>
         
         <div className="spectrum-settings-panel">
-          <div className="settings-tabs">
+          <div className="settings-tabs" ref={settingsTabsRef}>
             <div 
               className={`settings-tab ${configTab === 'configurations' ? 'active' : ''}`}
               onClick={() => setConfigTab('configurations')}
+              ref={configurationsTabRef}
             >
               Configurations
             </div>
             <div 
               className={`settings-tab ${configTab === 'markers' ? 'active' : ''}`}
               onClick={() => setConfigTab('markers')}
+              ref={markersTabRef}
             >
               Markers
             </div>
+            {/* Tab indicator element */}
+            <div 
+              className="settings-indicator" 
+              style={{ 
+                left: `${settingsIndicator.left}px`, 
+                width: `${settingsIndicator.width}px` 
+              }}
+            />
           </div>
           
           <div className="settings-content">

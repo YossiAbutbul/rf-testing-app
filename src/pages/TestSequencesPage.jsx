@@ -146,30 +146,45 @@ const TestSequencesPage = () => {
     runCondition: 'Always Run',
     testFrequency: 'LoRa 9xx MHz (IL)',
     testPower: '0 dBm',
-    minValue: '-0.5 dBm',
-    maxValue: '0.5 dBm',
+    minValue: '-0.5',
+    maxValue: '0.5',
     captureSpectrum: true
   });
   
   // Update edit form when selected test changes
   useEffect(() => {
-    const selectedTestStep = getSelectedTestStep();
-    if (selectedTestStep) {
-      setEditForm({
-        testName: selectedTestStep.name,
-        testType: selectedTestStep.type === 'power' ? 'Power' : 
-                 selectedTestStep.type === 'frequency' ? 'Frequency Accuracy' : 'Current Consumption',
-        runCondition: selectedTestStep.runCondition === 'always' ? 'Always Run' : 
-                     selectedTestStep.runCondition === 'ifPreviousPasses' ? 'If Previous Passes' : 'Stop When Finished',
-        testFrequency: 'LoRa 9xx MHz (IL)',
-        testPower: selectedTestStep.name.includes('0 dBm') ? '0 dBm' : 
-                  selectedTestStep.name.includes('14 dBm') ? '14 dBm' : '30 dBm',
-        minValue: '-0.5 dBm',
-        maxValue: '0.5 dBm',
-        captureSpectrum: true
-      });
+  const selectedTestStep = getSelectedTestStep();
+  if (selectedTestStep) {
+    // Use regex or more specific matching for the dBm values
+    let powerValue = '30 dBm'; // Default fallback
+    
+    // Use regex to match the exact dBm value with word boundaries
+    const match0dBm = /\b0\s*dBm\b/.test(selectedTestStep.name);
+    const match14dBm = /\b14\s*dBm\b/.test(selectedTestStep.name);
+    const match30dBm = /\b30\s*dBm\b/.test(selectedTestStep.name);
+    
+    if (match0dBm) {
+      powerValue = '0 dBm';
+    } else if (match14dBm) {
+      powerValue = '14 dBm';
+    } else if (match30dBm) {
+      powerValue = '30 dBm';
     }
-  }, [selectedTest]);
+    
+    setEditForm({
+      testName: selectedTestStep.name,
+      testType: selectedTestStep.type === 'power' ? 'Power' : 
+               selectedTestStep.type === 'frequency' ? 'Frequency Accuracy' : 'Current Consumption',
+      runCondition: selectedTestStep.runCondition === 'always' ? 'Always Run' : 
+                   selectedTestStep.runCondition === 'ifPreviousPasses' ? 'If Previous Passes' : 'Stop When Finished',
+      testFrequency: 'LoRa 9xx MHz (IL)',
+      testPower: powerValue,
+      minValue: '-0.5',
+      maxValue: '0.5',
+      captureSpectrum: true
+    });
+  }
+}, [selectedTest]);
   
   // Handlers for test sequence management
   const handleAddStep = () => {
@@ -515,9 +530,9 @@ const TestSequencesPage = () => {
             
             <div className="form-row">
               <div className="form-group">
-                <label className="form-label">Minimum Value</label>
+                <label className="form-label">Minimum Value [dBm]</label>
                 <input 
-                  type="text" 
+                  type="number" 
                   className="form-input" 
                   value={editForm.minValue}
                   onChange={(e) => setEditForm({...editForm, minValue: e.target.value})}
@@ -525,9 +540,9 @@ const TestSequencesPage = () => {
               </div>
               
               <div className="form-group">
-                <label className="form-label">Maximum Value</label>
+                <label className="form-label">Maximum Value [dBm]</label>
                 <input 
-                  type="text" 
+                  type="number" 
                   className="form-input" 
                   value={editForm.maxValue}
                   onChange={(e) => setEditForm({...editForm, maxValue: e.target.value})}

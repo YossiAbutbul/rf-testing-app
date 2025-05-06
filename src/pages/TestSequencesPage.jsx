@@ -105,7 +105,7 @@ const TestSequencesPage = () => {
     },
     {
       id: 'tx-current-0dbm',
-      name: 'Tx Current Consuption 0dBm',
+      name: 'Tx Current Consumption 0 dBm',
       type: 'current',
       runCondition: 'stopWhenFinished',
       badge: 'Current Consumption'
@@ -153,38 +153,66 @@ const TestSequencesPage = () => {
   
   // Update edit form when selected test changes
   useEffect(() => {
-  const selectedTestStep = getSelectedTestStep();
-  if (selectedTestStep) {
-    // Use regex or more specific matching for the dBm values
-    let powerValue = '30 dBm'; // Default fallback
-    
-    // Use regex to match the exact dBm value with word boundaries
-    const match0dBm = /\b0\s*dBm\b/.test(selectedTestStep.name);
-    const match14dBm = /\b14\s*dBm\b/.test(selectedTestStep.name);
-    const match30dBm = /\b30\s*dBm\b/.test(selectedTestStep.name);
-    
-    if (match0dBm) {
-      powerValue = '0 dBm';
-    } else if (match14dBm) {
-      powerValue = '14 dBm';
-    } else if (match30dBm) {
-      powerValue = '30 dBm';
+    const selectedTestStep = getSelectedTestStep();
+    if (selectedTestStep) {
+      // Use regex or more specific matching for the dBm values
+      let powerValue = '30 dBm'; // Default fallback
+      
+      // Use regex to match the exact dBm value with word boundaries
+      const match0dBm = /\b0\s*dBm\b/.test(selectedTestStep.name);
+      const match14dBm = /\b14\s*dBm\b/.test(selectedTestStep.name);
+      const match30dBm = /\b30\s*dBm\b/.test(selectedTestStep.name);
+      
+      if (match0dBm) {
+        powerValue = '0 dBm';
+      } else if (match14dBm) {
+        powerValue = '14 dBm';
+      } else if (match30dBm) {
+        powerValue = '30 dBm';
+      }
+      
+      setEditForm({
+        testName: selectedTestStep.name,
+        testType: selectedTestStep.type === 'power' ? 'Power' : 
+                selectedTestStep.type === 'frequency' ? 'Frequency Accuracy' : 'Current Consumption',
+        runCondition: selectedTestStep.runCondition === 'always' ? 'Always Run' : 
+                    selectedTestStep.runCondition === 'ifPreviousPasses' ? 'If Previous Passes' : 'Stop When Finished',
+        testFrequency: 'LoRa 9xx MHz (IL)',
+        testPower: powerValue,
+        minValue: '-0.5',
+        maxValue: '0.5',
+        captureSpectrum: true
+      });
     }
-    
-    setEditForm({
-      testName: selectedTestStep.name,
-      testType: selectedTestStep.type === 'power' ? 'Power' : 
-               selectedTestStep.type === 'frequency' ? 'Frequency Accuracy' : 'Current Consumption',
-      runCondition: selectedTestStep.runCondition === 'always' ? 'Always Run' : 
-                   selectedTestStep.runCondition === 'ifPreviousPasses' ? 'If Previous Passes' : 'Stop When Finished',
-      testFrequency: 'LoRa 9xx MHz (IL)',
-      testPower: powerValue,
-      minValue: '-0.5',
-      maxValue: '0.5',
-      captureSpectrum: true
-    });
-  }
-}, [selectedTest]);
+  }, [selectedTest]);
+  
+  // Function to handle power change and update test name accordingly
+  const handlePowerChange = (power) => {
+    const selectedTestStep = getSelectedTestStep();
+    if (selectedTestStep) {
+      let newName = editForm.testName;
+      
+      // Update name based on test type
+      if (selectedTestStep.type === 'power') {
+        // For power tests, keep "Tx Power" prefix and update the dBm value
+        newName = `Tx Power ${power}`;
+      } else if (selectedTestStep.type === 'current') {
+        // For current tests, keep "Tx Current Consumption" prefix and update the dBm value
+        newName = `Tx Current Consumption ${power}`;
+      }
+      
+      setEditForm({
+        ...editForm,
+        testPower: power,
+        testName: newName
+      });
+    } else {
+      setEditForm({
+        ...editForm,
+        testPower: power
+      });
+    }
+  };
   
   // Handlers for test sequence management
   const handleAddStep = () => {
@@ -213,9 +241,19 @@ const TestSequencesPage = () => {
         const badge = editForm.testType === 'Power' ? 'Power' : 
                      editForm.testType === 'Frequency Accuracy' ? 'Frequency Accuracy' : 'Current Consumption';
         
+        // Ensure the name reflects the current power setting if it's a power or current test
+        let newName = editForm.testName;
+        
+        // Auto-update name based on test type and power
+        if (type === 'power' && !newName.includes(editForm.testPower)) {
+          newName = `Tx Power ${editForm.testPower}`;
+        } else if (type === 'current' && !newName.includes(editForm.testPower)) {
+          newName = `Tx Current Consumption ${editForm.testPower}`;
+        }
+        
         return {
           ...step,
-          name: editForm.testName,
+          name: newName,
           type,
           runCondition,
           badge
@@ -226,6 +264,25 @@ const TestSequencesPage = () => {
     
     setTestSteps(updatedSteps);
     console.log('Saving test step changes...', editForm);
+  };
+  
+  // Handle test type change and update the name accordingly
+  const handleTestTypeChange = (testType) => {
+    let newName = editForm.testName;
+    
+    if (testType === 'Power') {
+      newName = `Tx Power ${editForm.testPower}`;
+    } else if (testType === 'Current Consumption') {
+      newName = `Tx Current Consumption ${editForm.testPower}`;
+    } else if (testType === 'Frequency Accuracy') {
+      newName = 'Frequency Accuracy';
+    }
+    
+    setEditForm({
+      ...editForm,
+      testType,
+      testName: newName
+    });
   };
   
   const handleRemoveStep = (id) => {
@@ -475,7 +532,7 @@ const TestSequencesPage = () => {
                 <select 
                   className="form-select"
                   value={editForm.testType}
-                  onChange={(e) => setEditForm({...editForm, testType: e.target.value})}
+                  onChange={(e) => handleTestTypeChange(e.target.value)}
                 >
                   <option value="Power">Power</option>
                   <option value="Current Consumption">Current Consumption</option>
@@ -517,7 +574,7 @@ const TestSequencesPage = () => {
                 <select 
                   className="form-select"
                   value={editForm.testPower}
-                  onChange={(e) => setEditForm({...editForm, testPower: e.target.value})}
+                  onChange={(e) => handlePowerChange(e.target.value)}
                 >
                   <option value="0 dBm">0 dBm</option>
                   <option value="14 dBm">14 dBm</option>

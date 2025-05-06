@@ -72,7 +72,8 @@ const TestMatrixPage = () => {
     return () => clearTimeout(timer);
   }, []);
   
-  // Test results based on the screenshot
+  // This will be replaced with actual test results from the backend
+  // Sample test results data
   const testResults = [
     {
       id: 1,

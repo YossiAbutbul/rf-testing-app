@@ -4,35 +4,6 @@
   margin-top: var(--space-6);
 }
 
-/* Tab Switching Animation */
-.protocol-tabs {
-  display: flex;
-  position: relative;
-  margin-bottom: var(--space-6);
-  border-bottom: 1px solid var(--color-gray-200);
-}
-
-.protocol-tab {
-  padding: var(--space-3) var(--space-4);
-  cursor: pointer;
-  font-weight: 500;
-  position: relative;
-  z-index: 1;
-  transition: color 0.3s ease;
-}
-
-.protocol-tab.active {
-  color: var(--color-primary);
-}
-
-.tab-indicator {
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  background-color: var(--color-primary);
-  transition: all 0.3s cubic-bezier(0.38, 0.8, 0.32, 1.07);
-}
-
 .test-steps-panel,
 .edit-step-panel {
   flex: 1;
@@ -52,14 +23,51 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  position: relative;
 }
 
+/* Drop indicator styles */
+.drop-indicator {
+  height: 0;
+  border: none;
+  margin: 0;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+}
+
+.drop-indicator::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-gray-100);
+  border-radius: 1px;
+  /* box-shadow: 0 0 5px var(--color-gray-100); */
+  transform: scaleY(0);
+  transition: transform 0.2s ease-out;
+}
+
+.drop-indicator {
+  height: 12px;
+  margin: var(--space-1) 0;
+  opacity: 1;
+}
+
+.drop-indicator::before {
+  transform: scaleY(3);
+}
+
+/* Dragging styles */
 .test-step {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   padding: var(--space-3);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  background-color: var(--bg-card);
+  transition: all 0.2s ease-out;
+  position: relative;
 }
 
 .test-step:hover {
@@ -72,6 +80,43 @@
   box-shadow: 0 0 0 1px var(--color-primary);
 }
 
+.test-step.dragging {
+  opacity: 0.6;
+  border: 1px dashed var(--color-primary);
+  background-color: rgba(var(--color-primary-rgb), 0.05);
+  transform: scale(0.97);
+  box-shadow: var(--shadow-md);
+}
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  margin-right: var(--space-2);
+  color: var(--text-secondary);
+  cursor: grab;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+
+.test-step:hover .drag-handle {
+  opacity: 1;
+}
+
+.drag-handle i {
+  font-size: 1rem;
+  margin-top: -2px;
+}
+
+.drag-handle i:first-child {
+  margin-right: -8px;
+}
+
+/* During dragging, change the cursor */
+body.dragging,
+body.dragging * {
+  cursor: grabbing !important;
+}
+
 .test-step-header {
   display: flex;
   justify-content: space-between;
@@ -81,6 +126,8 @@
 
 .test-step-name {
   font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 
 .test-step-actions {
@@ -106,8 +153,23 @@
   color: var(--text-primary);
 }
 
+.step-action-button.move-up:hover,
+.step-action-button.move-down:hover {
+  color: var(--color-primary);
+}
+
 .step-action-button.remove:hover {
   color: var(--color-status-error);
+}
+
+.step-action-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.step-action-button:disabled:hover {
+  background-color: transparent;
+  color: var(--text-secondary);
 }
 
 .test-step-footer {
@@ -169,4 +231,64 @@
   margin-top: var(--space-6);
   display: flex;
   justify-content: flex-end;
+}
+
+/* Protocol Tabs Animation */
+.protocol-tabs {
+  display: flex;
+  position: relative;
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.protocol-tab {
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+.protocol-tab.active {
+  color: var(--color-primary);
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: all 0.3s cubic-bezier(0.38, 0.8, 0.32, 1.07);
+}
+
+/* Tab Switching Animation */
+.tabs {
+  transition: all 0.3s ease;
+}
+
+.tab {
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  transform: translateY(-2px);
+}
+
+/* Fade-in/Slide-in Animation for Expanded Devices */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.expanded-device {
+  animation: slideIn 0.3s ease-out;
 }

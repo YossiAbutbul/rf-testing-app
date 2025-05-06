@@ -4,6 +4,8 @@ import '../styles/pages/testsequences.css';
 const TestSequencesPage = () => {
   const [activeTab, setActiveTab] = useState('lora');
   const [selectedTest, setSelectedTest] = useState('tx-power-0dbm');
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [dropIndex, setDropIndex] = useState(null);
   
   // Refs for tab indicator positioning
   const tabsRef = useRef(null);
@@ -71,8 +73,8 @@ const TestSequencesPage = () => {
     return () => clearTimeout(timer);
   }, []);
   
-  // Test steps based on the screenshot
-  const testSteps = [
+  // Test steps with state management
+  const [testSteps, setTestSteps] = useState([
     {
       id: 'tx-power-0dbm',
       name: 'Tx Power 0 dBm',
@@ -108,9 +110,36 @@ const TestSequencesPage = () => {
       runCondition: 'stopWhenFinished',
       badge: 'Current Consumption'
     }
-  ];
+  ]);
   
-  // Form values for editing test steps
+  // Function to move a step up in the order
+  const moveStepUp = (index) => {
+    if (index > 0) {
+      const updatedSteps = [...testSteps];
+      const temp = updatedSteps[index];
+      updatedSteps[index] = updatedSteps[index - 1];
+      updatedSteps[index - 1] = temp;
+      setTestSteps(updatedSteps);
+    }
+  };
+  
+  // Function to move a step down in the order
+  const moveStepDown = (index) => {
+    if (index < testSteps.length - 1) {
+      const updatedSteps = [...testSteps];
+      const temp = updatedSteps[index];
+      updatedSteps[index] = updatedSteps[index + 1];
+      updatedSteps[index + 1] = temp;
+      setTestSteps(updatedSteps);
+    }
+  };
+  
+  // Find the test step that matches the selected ID
+  const getSelectedTestStep = () => {
+    return testSteps.find(step => step.id === selectedTest) || testSteps[0];
+  };
+  
+  // Form values for editing test steps - updates when selected test changes
   const [editForm, setEditForm] = useState({
     testName: 'Tx Power 0 dBm',
     testType: 'Power',
@@ -122,13 +151,77 @@ const TestSequencesPage = () => {
     captureSpectrum: true
   });
   
+  // Update edit form when selected test changes
+  useEffect(() => {
+    const selectedTestStep = getSelectedTestStep();
+    if (selectedTestStep) {
+      setEditForm({
+        testName: selectedTestStep.name,
+        testType: selectedTestStep.type === 'power' ? 'Power' : 
+                 selectedTestStep.type === 'frequency' ? 'Frequency Accuracy' : 'Current Consumption',
+        runCondition: selectedTestStep.runCondition === 'always' ? 'Always Run' : 
+                     selectedTestStep.runCondition === 'ifPreviousPasses' ? 'If Previous Passes' : 'Stop When Finished',
+        testFrequency: 'LoRa 9xx MHz (IL)',
+        testPower: selectedTestStep.name.includes('0 dBm') ? '0 dBm' : 
+                  selectedTestStep.name.includes('14 dBm') ? '14 dBm' : '30 dBm',
+        minValue: '-0.5 dBm',
+        maxValue: '0.5 dBm',
+        captureSpectrum: true
+      });
+    }
+  }, [selectedTest]);
+  
   // Handlers for test sequence management
   const handleAddStep = () => {
-    console.log('Adding new test step...');
+    const newStep = {
+      id: `new-test-${Date.now()}`,
+      name: 'New Test Step',
+      type: 'power',
+      runCondition: 'always',
+      badge: 'Power'
+    };
+    
+    setTestSteps([...testSteps, newStep]);
+    setSelectedTest(newStep.id);
   };
   
   const handleSaveChanges = () => {
-    console.log('Saving test step changes...');
+    const updatedSteps = testSteps.map(step => {
+      if (step.id === selectedTest) {
+        // Map form values back to step object format
+        const runCondition = editForm.runCondition === 'Always Run' ? 'always' : 
+                            editForm.runCondition === 'If Previous Passes' ? 'ifPreviousPasses' : 'stopWhenFinished';
+        
+        const type = editForm.testType === 'Power' ? 'power' : 
+                    editForm.testType === 'Frequency Accuracy' ? 'frequency' : 'current';
+        
+        const badge = editForm.testType === 'Power' ? 'Power' : 
+                     editForm.testType === 'Frequency Accuracy' ? 'Frequency Accuracy' : 'Current Consumption';
+        
+        return {
+          ...step,
+          name: editForm.testName,
+          type,
+          runCondition,
+          badge
+        };
+      }
+      return step;
+    });
+    
+    setTestSteps(updatedSteps);
+    console.log('Saving test step changes...', editForm);
+  };
+  
+  const handleRemoveStep = (id) => {
+    // Filter out the step to remove
+    const updatedSteps = testSteps.filter(step => step.id !== id);
+    setTestSteps(updatedSteps);
+    
+    // If removed step is selected, select the first step
+    if (id === selectedTest && updatedSteps.length > 0) {
+      setSelectedTest(updatedSteps[0].id);
+    }
   };
   
   const handleSaveConfiguration = () => {
@@ -151,6 +244,61 @@ const TestSequencesPage = () => {
       default:
         return '';
     }
+  };
+  
+  // Simplified Drag and Drop handlers
+  const handleDragStart = (e, index) => {
+    // Set which item is being dragged
+    setDraggedItem(index);
+    document.body.classList.add('dragging');
+  };
+  
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    
+    // Don't do anything if hovering over the dragged item
+    if (index === draggedItem) {
+      return;
+    }
+    
+    // Get mouse position relative to the target
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseY = e.clientY - rect.top;
+    const isTop = mouseY < rect.height / 2;
+    
+    // Set the drop target index and position
+    // If dropping at the top of the item, put it before
+    // If dropping at the bottom of the item, put it after
+    setDropIndex(isTop ? index : index + 1);
+  };
+  
+  const handleDragEnd = () => {
+    document.body.classList.remove('dragging');
+    
+    // Only reorder if we have both a dragged item and a drop target
+    if (draggedItem !== null && dropIndex !== null) {
+      // Create a copy of the test steps
+      const items = [...testSteps];
+      
+      // Remove the dragged item
+      const [reorderedItem] = items.splice(draggedItem, 1);
+      
+      // Adjust the drop index if needed
+      let adjustedDropIndex = dropIndex;
+      if (draggedItem < dropIndex) {
+        adjustedDropIndex--;
+      }
+      
+      // Insert the item at the new position
+      items.splice(adjustedDropIndex, 0, reorderedItem);
+      
+      // Update the state
+      setTestSteps(items);
+    }
+    
+    // Reset the state
+    setDraggedItem(null);
+    setDropIndex(null);
   };
 
   return (
@@ -211,39 +359,83 @@ const TestSequencesPage = () => {
           <div className="panel-description">Drag and drop to reorder test steps</div>
           
           <div className="test-steps-list">
-            {testSteps.map(step => (
-              <div 
-                key={step.id}
-                className={`test-step ${selectedTest === step.id ? 'selected' : ''}`}
-                onClick={() => setSelectedTest(step.id)}
-              >
-                <div className="test-step-header">
-                  <div className="test-step-name">{step.name}</div>
-                  <div className="test-step-actions">
-                    <button className="step-action-button move-up">
-                      <i className="bx bx-up-arrow-alt"></i>
-                    </button>
-                    <button className="step-action-button move-down">
-                      <i className="bx bx-down-arrow-alt"></i>
-                    </button>
-                    <button className="step-action-button remove">
-                      <i className="bx bx-trash"></i>
-                    </button>
+            {testSteps.map((step, index) => (
+              <React.Fragment key={step.id}>
+                {/* Show drop indicator before this item if needed */}
+                {dropIndex === index && draggedItem !== null && draggedItem !== index && (
+                  <div className="drop-indicator"></div>
+                )}
+                
+                <div 
+                  className={`test-step ${selectedTest === step.id ? 'selected' : ''} ${draggedItem === index ? 'dragging' : ''}`}
+                  onClick={() => setSelectedTest(step.id)}
+                  draggable={true}
+                  onDragStart={(e) => handleDragStart(e, index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDragEnd={handleDragEnd}
+                >
+                  <div className="test-step-header">
+                    <div className="test-step-name">
+                      <div className="drag-handle" title="Drag to reorder">
+                        <i className="bx bx-dots-vertical-rounded"></i>
+                        <i className="bx bx-dots-vertical-rounded"></i>
+                      </div>
+                      {step.name}
+                    </div>
+                    <div className="test-step-actions">
+                      <button 
+                        className="step-action-button move-up" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          moveStepUp(index);
+                        }}
+                        title="Move up"
+                        disabled={index === 0}
+                      >
+                        <i className="bx bx-up-arrow-alt"></i>
+                      </button>
+                      <button 
+                        className="step-action-button move-down"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          moveStepDown(index);
+                        }}
+                        title="Move down"
+                        disabled={index === testSteps.length - 1}
+                      >
+                        <i className="bx bx-down-arrow-alt"></i>
+                      </button>
+                      <button 
+                        className="step-action-button remove"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveStep(step.id);
+                        }}
+                        title="Remove"
+                      >
+                        <i className="bx bx-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="test-step-footer">
+                    <span className={`test-badge ${getBadgeClass(step.type)}`}>
+                      {step.badge}
+                    </span>
+                    <span className="run-condition">
+                      {step.runCondition === 'always' && 'Always Run'}
+                      {step.runCondition === 'ifPreviousPasses' && 'If Previous Passes'}
+                      {step.runCondition === 'stopWhenFinished' && 'Stop When Finished'}
+                    </span>
                   </div>
                 </div>
-                
-                <div className="test-step-footer">
-                  <span className={`test-badge ${getBadgeClass(step.type)}`}>
-                    {step.badge}
-                  </span>
-                  <span className="run-condition">
-                    {step.runCondition === 'always' && 'Always Run'}
-                    {step.runCondition === 'ifPreviousPasses' && 'If Previous Passes'}
-                    {step.runCondition === 'stopWhenFinished' && 'Stop When Finished'}
-                  </span>
-                </div>
-              </div>
+              </React.Fragment>
             ))}
+            
+            {/* Show drop indicator at the end if needed */}
+            {dropIndex === testSteps.length && draggedItem !== null && (
+              <div className="drop-indicator"></div>
+            )}
           </div>
         </div>
         

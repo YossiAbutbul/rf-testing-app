@@ -108,17 +108,18 @@ const EquipmentSetup = ({ onNext }) => {
         </button>
       </div>
       
-      <div className="equipment-status alert alert-success">
+      {/* <div className="equipment-status alert alert-success">
         <i className="bx bx-check-circle"></i>
         <div>
           <strong>Equipment Ready</strong>
           <p>All required test equipment is connected and configured.</p>
         </div>
-      </div>
+      </div> */}
       
       <div className="card-actions">
+        <div className="spacer"></div>
         <button className="btn btn-primary" onClick={onNext}>
-          Next Step
+          Next
           <i className="bx bx-right-arrow-alt btn-icon"></i>
         </button>
       </div>

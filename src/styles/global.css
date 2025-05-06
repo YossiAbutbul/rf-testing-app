@@ -161,11 +161,11 @@ button {
   padding: var(--space-3) var(--space-4);
   margin-right: var(--space-4);
   cursor: pointer;
-  border-bottom: 2px solid transparent;
+  /* border-bottom: 2px solid transparent; */
 }
 
 .tab.active {
-  border-bottom-color: var(--color-dark-gray);
+  /* border-bottom-color: var(--color-dark-gray); */
   color: var(--color-gray-700);
   font-weight: 500;
 }

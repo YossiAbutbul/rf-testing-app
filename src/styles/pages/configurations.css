@@ -20,7 +20,6 @@
 
 .step.active {
   border-color: var(--color-gray-300);
-  /* border: 2px solid var(--color-dark-gray); */
   box-shadow: var(--shadow-sm);
 }
 
@@ -304,19 +303,57 @@
   margin-top: var(--space-2);
 }
 
-.path-input-container {
-  display: flex;
-  gap: var(--space-2);
+/* Enhanced textarea styling */
+.form-textarea {
+  width: 100%;
+  resize: none;
+  padding: var(--space-3);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-input);
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.browse-button {
-  flex-shrink: 0;
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+}
+
+/* Fixed size notes textarea */
+.notes-textarea {
+  min-height: 150px; /* Fixed minimum height */
+  max-height: 300px; /* Maximum height when expanded */
+  resize: none; /* Allow vertical resizing only */
+  line-height: 1.5;
+  font-size: var(--text-sm);
 }
 
 .done-button {
   background-color: var(--color-status-success);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  transition: all 0.2s ease;
 }
 
 .done-button:hover {
-  background-color: var(--color-accent-dark);
+  background-color: var(--color-success-dark);
+  transform: translateY(-1px);
+}
+
+.done-button:active {
+  transform: translateY(1px);
+}
+
+.alert {
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.alert-success {
+  background-color: rgba(46, 204, 113, 0.1);
+  border-left: 4px solid var(--color-status-success);
 }

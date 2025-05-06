@@ -219,7 +219,7 @@ body.dragging * {
 }
 
 .form-section-title {
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: 500;
   margin-bottom: var(--space-3);
   padding-bottom: var(--space-2);

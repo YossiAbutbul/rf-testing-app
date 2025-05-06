@@ -7,6 +7,7 @@ const DevicesPage = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
   const [expandedProjects, setExpandedProjects] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
   
   // Refs for tab indicator positioning
   const tabsRef = useRef(null);
@@ -113,6 +114,41 @@ const DevicesPage = () => {
     setProjects(mockProjects);
   }, []);
 
+  // Auto-expand projects when searching
+  useEffect(() => {
+    if (searchTerm && activeTab === 'projects') {
+      // If we're searching and in projects tab, expand all projects
+      const expandedState = {};
+      
+      // For each project, check if it or any of its devices match the search
+      projects.forEach(project => {
+        const normalizedSearchTerm = searchTerm.toLowerCase();
+        
+        // Check if project name matches
+        if (project.name.toLowerCase().includes(normalizedSearchTerm)) {
+          expandedState[project.id] = true;
+          return;
+        }
+        
+        // Check if any device matches
+        const deviceMatches = project.devices.some(device => 
+          device.name.toLowerCase().includes(normalizedSearchTerm) || 
+          device.id.toLowerCase().includes(normalizedSearchTerm)
+        );
+        
+        if (deviceMatches) {
+          expandedState[project.id] = true;
+        }
+      });
+      
+      // Update expanded state
+      setExpandedProjects(prev => ({
+        ...prev,
+        ...expandedState
+      }));
+    }
+  }, [searchTerm, activeTab, projects]);
+
   const scanForDevices = () => {
     setLoading(true);
     
@@ -156,6 +192,79 @@ const DevicesPage = () => {
       [projectId]: !prev[projectId]
     }));
   };
+  
+  // Handle search input changes
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+  
+  // Filter devices based on search term
+  const getFilteredDevices = () => {
+    if (!searchTerm) return devices;
+    
+    const normalizedSearchTerm = searchTerm.toLowerCase();
+    
+    return devices.filter(device => 
+      device.name.toLowerCase().includes(normalizedSearchTerm) || 
+      device.id.toLowerCase().includes(normalizedSearchTerm)
+    );
+  };
+  
+  // Filter projects based on search term
+  const getFilteredProjects = () => {
+    if (!searchTerm) return projects;
+    
+    const normalizedSearchTerm = searchTerm.toLowerCase();
+    
+    return projects.filter(project => {
+      // Check if project name matches
+      if (project.name.toLowerCase().includes(normalizedSearchTerm)) {
+        return true;
+      }
+      
+      // Check if any device in the project matches
+      const hasMatchingDevice = project.devices.some(device => 
+        device.name.toLowerCase().includes(normalizedSearchTerm) || 
+        device.id.toLowerCase().includes(normalizedSearchTerm)
+      );
+      
+      return hasMatchingDevice;
+    });
+  };
+  
+  // Get filtered versions of devices and projects based on search
+  const filteredDevices = getFilteredDevices();
+  const filteredProjects = getFilteredProjects();
+  
+  // Clear search input and close all projects
+  const clearSearch = () => {
+    setSearchTerm('');
+    // Close all projects when search is cleared
+    setExpandedProjects({});
+  };
+  
+  // Helper function to highlight matching text in search results
+  const highlightMatch = (text, term) => {
+    if (!term) return text;
+    
+    const normalizedText = text.toString();
+    const normalizedTerm = term.toLowerCase();
+    const index = normalizedText.toLowerCase().indexOf(normalizedTerm);
+    
+    if (index === -1) return text;
+    
+    const before = normalizedText.slice(0, index);
+    const match = normalizedText.slice(index, index + normalizedTerm.length);
+    const after = normalizedText.slice(index + normalizedTerm.length);
+    
+    return (
+      <>
+        {before}
+        <span className="highlight">{match}</span>
+        {after}
+      </>
+    );
+  };
 
   return (
     <div className="page-container">
@@ -197,120 +306,185 @@ const DevicesPage = () => {
           <input 
             type="text" 
             className="form-input" 
-            placeholder="Enter device name or MAC to search..." 
+            placeholder="Search by device name or MAC address..." 
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
-          <i className="bx bx-search search-icon"></i>
+          {searchTerm ? (
+            <i className="bx bx-x search-clear" onClick={clearSearch}></i>
+          ) : (
+            <i className="bx bx-search search-icon"></i>
+          )}
         </div>
-        <button className="btn btn-secondary filter-button">
+        {/* <button className="btn btn-secondary filter-button">
           <i className="bx bx-filter"></i>
-        </button>
+        </button> */}
       </div>
       
       {activeTab === 'available' && (
         <div className="devices-list">
-          {devices.map((device, index) => (
-            <div key={index} className="device-card">
-              <div className="device-icon">
-                <i className="bx bx-bluetooth"></i>
-              </div>
-              <div className="device-info">
-                <div className="device-name">{device.name}</div>
-                <div className="device-id">{device.id}</div>
-              </div>
-              <div className="device-actions">
-                {device.status === 'connected' ? (
-                  <div 
-                    className="connection-status connected"
-                    onClick={() => connectToDevice(device.id)}
-                  >
-                    Connected
-                  </div>
-                ) : (
-                  <button 
-                    className="btn btn-secondary connect-button"
-                    onClick={() => connectToDevice(device.id)}
-                  >
-                    Connect
-                  </button>
-                )}
-                <button className="btn btn-icon-only">
-                  <i className="bx bx-plus"></i>
-                </button>
-              </div>
+          {filteredDevices.length === 0 ? (
+            <div className="no-results">
+              <i className="bx bx-search-alt no-results-icon"></i>
+              <p>No devices found matching "{searchTerm}"</p>
+              <button className="btn btn-secondary" onClick={clearSearch}>
+                Clear Search
+              </button>
             </div>
-          ))}
+          ) : (
+            filteredDevices.map((device, index) => (
+              <div key={index} className="device-card">
+                <div className="device-icon">
+                  <i className="bx bx-bluetooth"></i>
+                </div>
+                <div className="device-info">
+                  <div className="device-name">
+                    {searchTerm ? highlightMatch(device.name, searchTerm) : device.name}
+                  </div>
+                  <div className="device-id">
+                    {searchTerm ? highlightMatch(device.id, searchTerm) : device.id}
+                  </div>
+                </div>
+                <div className="device-actions">
+                  {device.status === 'connected' ? (
+                    <div 
+                      className="connection-status connected"
+                      onClick={() => connectToDevice(device.id)}
+                    >
+                      Connected
+                    </div>
+                  ) : (
+                    <button 
+                      className="btn btn-secondary connect-button"
+                      onClick={() => connectToDevice(device.id)}
+                    >
+                      Connect
+                    </button>
+                  )}
+                  <button className="btn btn-icon-only">
+                    <i className="bx bx-plus"></i>
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
 
       {activeTab === 'projects' && (
         <div className="devices-list">
-          {projects.map((project) => (
-            <React.Fragment key={project.id}>
-              <div 
-                className="device-card"
-                data-expanded={!!expandedProjects[project.id]}
-                onClick={() => toggleProjectExpand(project.id)}
-              >
-                <div className="device-icon">
-                  <i className="bx bx-folder"></i>
-                </div>
-                <div className="device-info">
-                  <div className="device-name">{project.name}</div>
-                  <div className="device-id">{project.devices.length} Devices</div>
-                </div>
-                <div className="device-actions">
-                  <button 
-                    className="btn btn-icon-only"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleProjectExpand(project.id);
-                    }}
-                  >
-                    <i className={`bx ${expandedProjects[project.id] ? 'bx-chevron-up' : 'bx-chevron-down'}`}></i>
-                  </button>
-                </div>
-              </div>
+          {filteredProjects.length === 0 ? (
+            <div className="no-results">
+              <i className="bx bx-search-alt no-results-icon"></i>
+              <p>No projects found matching "{searchTerm}"</p>
+              <button className="btn btn-secondary" onClick={clearSearch}>
+                Clear Search
+              </button>
+            </div>
+          ) : (
+            filteredProjects.map((project) => {
+              // Determine if any devices in this project match the search
+              const matchingDevices = searchTerm 
+                ? project.devices.filter(device => 
+                    device.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                    device.id.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                : project.devices;
               
-              {expandedProjects[project.id] && project.devices.map((device, index) => (
-                <div 
-                  key={index} 
-                  className="device-card expanded-device" 
-                  style={{marginLeft: '40px', width: 'calc(100% - 40px)'}}
-                >
-                  <div className="device-icon">
-                    <i className="bx bx-bluetooth"></i>
-                  </div>
-                  <div className="device-info">
-                    <div className="device-name">{device.name}</div>
-                    <div className="device-id">{device.id}</div>
-                  </div>
-                  <div className="device-actions">
-                    {device.status === 'connected' ? (
-                      <div 
-                        className="connection-status connected"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          connectToDevice(device.id, 'projects');
-                        }}
-                      >
-                        Connected
+              return (
+                <React.Fragment key={project.id}>
+                  <div 
+                    className="device-card"
+                    data-expanded={!!expandedProjects[project.id]}
+                    onClick={() => toggleProjectExpand(project.id)}
+                  >
+                    <div className="device-icon">
+                      <i className="bx bx-folder"></i>
+                    </div>
+                    <div className="device-info">
+                      <div className="device-name">
+                        {searchTerm ? highlightMatch(project.name, searchTerm) : project.name}
                       </div>
-                    ) : (
+                      <div className="device-id">
+                        {project.devices.length} Devices
+                        {searchTerm && matchingDevices.length > 0 && matchingDevices.length < project.devices.length && 
+                          ` (${matchingDevices.length} match${matchingDevices.length === 1 ? '' : 'es'})`
+                        }
+                      </div>
+                    </div>
+                    <div className="device-actions">
                       <button 
-                        className="btn btn-secondary connect-button"
+                        className="btn btn-icon-only"
                         onClick={(e) => {
                           e.stopPropagation();
-                          connectToDevice(device.id, 'projects');
+                          toggleProjectExpand(project.id);
                         }}
                       >
-                        Connect
+                        <i className={`bx ${expandedProjects[project.id] ? 'bx-chevron-up' : 'bx-chevron-down'}`}></i>
                       </button>
-                    )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </React.Fragment>
-          ))}
+                  
+                  {expandedProjects[project.id] && project.devices.map((device, index) => {
+                    // Skip devices that don't match search criteria
+                    if (searchTerm) {
+                      const normalizedSearchTerm = searchTerm.toLowerCase();
+                      const deviceMatches = 
+                        device.name.toLowerCase().includes(normalizedSearchTerm) || 
+                        device.id.toLowerCase().includes(normalizedSearchTerm);
+                      
+                      if (!deviceMatches && !project.name.toLowerCase().includes(normalizedSearchTerm)) {
+                        return null;
+                      }
+                    }
+                    
+                    return (
+                      <div 
+                        key={index} 
+                        className="device-card expanded-device" 
+                        style={{marginLeft: '40px', width: 'calc(100% - 40px)'}}
+                      >
+                        <div className="device-icon">
+                          <i className="bx bx-bluetooth"></i>
+                        </div>
+                        <div className="device-info">
+                          <div className="device-name">
+                            {searchTerm ? highlightMatch(device.name, searchTerm) : device.name}
+                          </div>
+                          <div className="device-id">
+                            {searchTerm ? highlightMatch(device.id, searchTerm) : device.id}
+                          </div>
+                        </div>
+                        <div className="device-actions">
+                          {device.status === 'connected' ? (
+                            <div 
+                              className="connection-status connected"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                connectToDevice(device.id, 'projects');
+                              }}
+                            >
+                              Connected
+                            </div>
+                          ) : (
+                            <button 
+                              className="btn btn-secondary connect-button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                connectToDevice(device.id, 'projects');
+                              }}
+                            >
+                              Connect
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              );
+            })
+          )}
         </div>
       )}
     </div>

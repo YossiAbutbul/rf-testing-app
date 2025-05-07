@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import '../../styles/components/modal.css';
+// import '../../../styles/components/modal.css'; // Import your CSS styles for the modal
 
 // Base Modal Component
 const Modal = ({ 
